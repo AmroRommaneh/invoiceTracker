@@ -1,6 +1,6 @@
 package com.trainingHarri.com.amrTraining.DTOs;
 
-import com.trainingHarri.com.amrTraining.Model.User;
+import com.trainingHarri.com.amrTraining.Model.sUser;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ public class roleDto {
     private int id;
     private com.trainingHarri.com.amrTraining.roleName roleName;
     private String discription;
-    private List<User> users;
+    private List<sUser> users;
 
     public com.trainingHarri.com.amrTraining.roleName getRoleName() {
         return roleName;
@@ -27,11 +27,11 @@ public class roleDto {
         this.discription = discription;
     }
 
-    public List<User> getUsers() {
+    public List<sUser> getUsers() {
         return users;
     }
 
-    public void setUsers(List<User> users) {
+    public void setUsers(List<sUser> users) {
         this.users = users;
     }
 }

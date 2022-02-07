@@ -3,6 +3,8 @@ package com.trainingHarri.com.amrTraining.Model;
 import com.trainingHarri.com.amrTraining.attachmentType;
 
 import javax.persistence.*;
+import java.io.File;
+
 @Entity
 @Table(name = "Attachment")
 public class attachment {
@@ -10,11 +12,18 @@ public class attachment {
     @Column(name = "attachId")
     @GeneratedValue
     private long Id;
-    @Column(name = "attachmentType")
+    @Enumerated(EnumType.STRING)
     private attachmentType attachmentType;
 
-    @Column(name = "URL")
-    private String URL;
+
+
+    @Lob
+    File content;
+
+    @Column(name = "attachmentName")
+    String name;
+@Column(name = "location")
+    String location;
 
 
     public long getId() {
@@ -25,10 +34,17 @@ public class attachment {
     @JoinColumn(name="invoiceId")
     private invoice invoice;
 
-    public attachment(com.trainingHarri.com.amrTraining.attachmentType attachmentType, String URL, com.trainingHarri.com.amrTraining.Model.invoice invoice) {
+    public attachment(com.trainingHarri.com.amrTraining.attachmentType attachmentType, File content, String name, String location, com.trainingHarri.com.amrTraining.Model.invoice invoice) {
         this.attachmentType = attachmentType;
-        this.URL = URL;
+        this.content = content;
+        this.name = name;
+        this.location = location;
         this.invoice = invoice;
+    }
+
+    public attachment(String name, String location) {
+        this.name = name;
+        this.location = location;
     }
 
     public attachment() {
@@ -43,13 +59,6 @@ public class attachment {
     }
 
 
-    public String getURL() {
-        return URL;
-    }
-
-    public void setURL(String URL) {
-        this.URL = URL;
-    }
 
     public com.trainingHarri.com.amrTraining.Model.invoice getInvoice() {
         return invoice;
@@ -57,5 +66,29 @@ public class attachment {
 
     public void setInvoice(com.trainingHarri.com.amrTraining.Model.invoice invoice) {
         this.invoice = invoice;
+    }
+
+    public File getContent() {
+        return content;
+    }
+
+    public void setContent(File content) {
+        this.content = content;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

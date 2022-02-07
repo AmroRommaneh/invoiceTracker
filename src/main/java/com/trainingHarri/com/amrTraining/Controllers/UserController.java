@@ -1,22 +1,24 @@
 package com.trainingHarri.com.amrTraining.Controllers;
 
-import com.trainingHarri.com.amrTraining.Constants;
 import com.trainingHarri.com.amrTraining.DTOs.userDto;
-import com.trainingHarri.com.amrTraining.Model.User;
+import com.trainingHarri.com.amrTraining.Model.Role;
+import com.trainingHarri.com.amrTraining.Model.sUser;
+import com.trainingHarri.com.amrTraining.Services.JwtUserDetailsService;
 import com.trainingHarri.com.amrTraining.Services.userService;
+import com.trainingHarri.com.amrTraining.config.JwtTokenUtil;
 import com.trainingHarri.com.amrTraining.exceptions.customExeption;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import com.trainingHarri.com.amrTraining.roleName;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 @Controller
@@ -25,49 +27,69 @@ import java.util.Map;
 public class UserController {
     @Autowired
     userService userSerivce;
+    @Autowired
+    com.trainingHarri.com.amrTraining.Repositries.userRepoPa userRepoPa;
+    @Autowired
+    com.trainingHarri.com.amrTraining.Repositries.roleRepo roleRepo;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    private JwtUserDetailsService userDetailsService;
+
     @PostMapping(path = "/registerUser")
-    public ResponseEntity<Map<String, String>> registerUser(@RequestBody userDto userDto) {
-        User user = new User();
-System.out.println("reeeched1");
+    public ResponseEntity<String> registerUser(@RequestBody userDto userDto) {
+        sUser user = new sUser();
         user.setPassword(userDto.getPassword());
         user.setName(userDto.getName());
         user.setPhoneNumber(userDto.getPhoneNumber());
         user.setEmail(userDto.getEmail());
-        user.setRoles(userDto.getRoles());
+        //   user.setRoles(userDto.getRoles());
         user.setGender(userDto.getGender());
-
-
+        Role role = roleRepo.findbyname(roleName.ROLE_SUPPORT.toString());
+System.out.println("role id "+role.getId());
 
         userSerivce.registerUser(user);
 
-        return new ResponseEntity<>(generateJWTToken(user), HttpStatus.OK);
-    }
+        System.out.println("user id "+user.getUserid());
 
-    //function to generate tokens
-    private Map<String, String> generateJWTToken(User user) {
-        long timestamp = System.currentTimeMillis();
-        String token = Jwts.builder().signWith(SignatureAlgorithm.HS256, Constants.API_SECRET_KEY)
-                .setIssuedAt(new Date(timestamp))
-                .setExpiration(new Date(timestamp + Constants.TOKEN_VALIDITY))
-                .claim("email", user.getEmail())
-                .claim("Name", user.getName())
-                .compact();
-        Map<String, String> map = new HashMap<>();
-        map.put("token", token);
-        return map;
+        userSerivce.saveUserRole(user.getUserid(), role.getId());
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getName());
+
+        final String token = jwtTokenUtil.generateToken(userDetails);
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("acces token",token);
+
+        return ResponseEntity.ok().headers(responseHeaders).body("account is created");
     }
 
     @PostMapping("/loginUser")
-    public ResponseEntity<Map<String, String>> loginUser(@RequestBody Map<String, Object> clientMap) {
+    public ResponseEntity<String> loginUser(@RequestBody Map<String, Object> clientMap) {
         String email = (String) clientMap.get("email");
         String password = (String) clientMap.get("password");
-        User user = userSerivce.validateUser(email, password);
+        sUser user = userSerivce.validateUser(email, password);
         System.out.println(email);
         System.out.println(password);
         if (user == null)
             throw new customExeption("No user exsit");
 
-        return new ResponseEntity<>(generateJWTToken(user), HttpStatus.OK);
+        return new ResponseEntity<>("loged in", HttpStatus.OK);
+    }
+
+    @PutMapping("/updateUser")
+    public ResponseEntity<Map<String, Object>> updateUser(@RequestBody userDto userDto) {
+        Map<String, Object> y = userService.updateUser(userDto);
+        return new ResponseEntity<>(y, HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllUsers")
+    public ResponseEntity<Page<sUser>> findAllUsers(Pageable pageable) {
+        return new ResponseEntity<>(userSerivce.findAll(pageable), HttpStatus.OK);
     }
 
 }

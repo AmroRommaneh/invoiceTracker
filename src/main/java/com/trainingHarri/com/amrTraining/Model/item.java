@@ -1,7 +1,6 @@
 package com.trainingHarri.com.amrTraining.Model;
 
 import javax.persistence.*;
-import java.util.List;
 @Entity
 @Table(name = "Item")
 public class item {
@@ -17,8 +16,8 @@ public class item {
     private double price;
 
 
-    @ManyToMany(mappedBy = "Items")
-    private List<invoice> invoices;
+//    @ManyToMany(mappedBy = "Items")
+//    private List<invoice> invoices;
 
     public item() {
     }

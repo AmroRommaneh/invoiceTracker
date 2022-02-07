@@ -5,12 +5,13 @@ import com.trainingHarri.com.amrTraining.roleName;
 
 import javax.persistence.*;
 import java.util.List;
+
 @Entity
 @Table(name="Role")
 public class Role {
-    @GeneratedValue
+    @GeneratedValue()
     @Id
-    private int id;
+    private Long id;
     @Enumerated(EnumType.STRING)
     private roleName roleName;
 
@@ -18,7 +19,7 @@ public class Role {
     private String discription;
 
     @ManyToMany(mappedBy = "Roles")
-    private List<User> users;
+    private List<sUser> users;
 
     public Role(com.trainingHarri.com.amrTraining.roleName roleName, String discription) {
         this.roleName = roleName;
@@ -28,7 +29,7 @@ public class Role {
     public Role() {
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -48,11 +49,11 @@ public class Role {
         this.discription = discription;
     }
 
-    public List<User> getUsers() {
+    public List<sUser> getUsers() {
         return users;
     }
 
-    public void setUsers(List<User> users) {
+    public void setUsers(List<sUser> users) {
         this.users = users;
     }
 }

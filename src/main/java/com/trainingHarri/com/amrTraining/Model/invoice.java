@@ -6,10 +6,10 @@ import java.util.List;
 @Entity
 @Table(name = "Invoice")
 public class invoice {
-@Id
+    @Id
     @GeneratedValue
     @Column(name = "Id")
-    private long invoiceId ;
+    private Long invoiceId ;
     @Column(name = "DateOfCreation")
     private Date dateOfCreation;
     @Column(name = "amount")
@@ -22,16 +22,16 @@ public class invoice {
 
     @ManyToOne
     @JoinColumn(name="userId")
-    private User user;
+    private sUser user;
 
     @OneToMany(mappedBy = "invoice")
     private List<attachment> attachmentList;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "invoiceItem",
-            joinColumns = @JoinColumn(name = "invoiceId", referencedColumnName = "Id"),
-            inverseJoinColumns = @JoinColumn(name = "itemId", referencedColumnName = "Id"))
-    private List<item> Items;
+//    @ManyToMany(cascade = CascadeType.ALL)
+//    @JoinTable(name = "invoiceItem",
+//            joinColumns = @JoinColumn(name = "invoiceId", referencedColumnName = "Id"),
+//            inverseJoinColumns = @JoinColumn(name = "itemId", referencedColumnName = "Id"))
+//    private List<item> Items;
 
 
     public invoice(Date dateOfCreation, double amount, Long externalInvoiceId) {
@@ -64,6 +64,10 @@ public class invoice {
         this.externalInvoiceId = externalInvoiceId;
     }
 
+    public Long getInvoiceId() {
+        return invoiceId;
+    }
+
     public List<attachment> getAttachmentList() {
         return attachmentList;
     }
@@ -72,11 +76,20 @@ public class invoice {
         this.attachmentList = attachmentList;
     }
 
-    public List<item> getItems() {
-        return Items;
+//    public List<item> getItems() {
+//        return Items;
+//    }
+//
+//    public void setItems(List<item> items) {
+//        Items = items;
+//    }
+
+
+    public sUser getUser() {
+        return user;
     }
 
-    public void setItems(List<item> items) {
-        Items = items;
+    public void setUser(sUser user) {
+        this.user = user;
     }
 }

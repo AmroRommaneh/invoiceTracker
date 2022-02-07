@@ -6,14 +6,14 @@ import javax.persistence.*;
 import java.util.List;
 @Entity
 @Table(name="User")
-public class User {
+public class sUser {
     @Id
     @GeneratedValue
     @Column(name = "Id")
     private Long userid ;
     @Column(name = "email" ,unique = true)
     private String email;
-    @Column(name = "name")
+    @Column(name = "name",unique = true)
     private String name;
     @Column(name = "password")
     private  String password;
@@ -31,7 +31,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<invoice> invoices;
 
-    public User(String email, String name, String password, Gender gender, String phoneNumber) {
+    public sUser(String email, String name, String password, Gender gender, String phoneNumber) {
         this.email = email;
         this.name = name;
         this.password = password;
@@ -39,7 +39,7 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public User() {
+    public sUser() {
     }
 
     public Long getUserid() {

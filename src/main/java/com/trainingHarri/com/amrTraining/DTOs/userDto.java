@@ -15,14 +15,22 @@ public class userDto {
     private String phoneNumber;
     private List<Role> Roles;
 
-
-    public userDto(String email, String name, String password, Gender gender, String phoneNumber, List<Role> roles) {
+    public userDto(long userid, String email, String name, String password, Gender gender, String phoneNumber, List<Role> roles) {
+        this.userid = userid;
         this.email = email;
         this.name = name;
         this.password = password;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
         Roles = roles;
+    }
+
+    public long getUserid() {
+        return userid;
+    }
+
+    public void setUserid(long userid) {
+        this.userid = userid;
     }
 
     public List<Role> getRoles() {

@@ -1,5 +1,5 @@
 package com.trainingHarri.com.amrTraining;
 
 public enum roleName {
-    SUPPORT,SUPER,AUDITOR
+    ROLE_SUPPORT,ROLE_SUPER,ROLE_AUDITOR
 }

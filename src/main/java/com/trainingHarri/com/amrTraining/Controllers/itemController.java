@@ -27,12 +27,10 @@ public class itemController {
         item.setName(itemdto.getName());
         item.setPrice(itemdto.getPrice());
         item.setQuantity(itemdto.getQuantity());
-
-
-
-
         itemservice.addItem(item);
-
         return new ResponseEntity<>("the item has been added", HttpStatus.OK);
     }
+
+
+
 }
