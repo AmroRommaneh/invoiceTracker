@@ -4,6 +4,7 @@ package com.trainingHarri.com.amrTraining.Services;
 import com.trainingHarri.com.amrTraining.Repositries.FileSystemRepository;
 import com.trainingHarri.com.amrTraining.Repositries.attachmentRepo;
 import com.trainingHarri.com.amrTraining.attachmentType;
+import com.trainingHarri.com.amrTraining.exceptions.customExeption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
@@ -21,8 +22,12 @@ public class FileLocationService {
     attachmentRepo attachmentRepo;
 
     public long saveImage(byte[] bytes, String imageName, invoice invoice) throws Exception {
+        if(invoice == null){
+            throw new customExeption("no invoice found");
+        }
         String location = fileSystemRepository.save(bytes, imageName);
         attachment x = new attachment(imageName, location);
+
         x.setInvoice(invoice);
         x.setAttachmentType(attachmentType.IMAGE);
         attachmentRepo.save(x);
@@ -33,6 +38,9 @@ public class FileLocationService {
     }
 
     public long savePDF(byte[] bytes, String pdfName ,invoice invoice) throws Exception {
+        if(invoice == null){
+            throw new customExeption("no invoice found");
+        }
         String location = fileSystemRepository.save(bytes, pdfName);
         attachment x = new attachment(pdfName, location);
         x.setInvoice(invoice);
@@ -49,6 +57,21 @@ public class FileLocationService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         System.out.println("location is " + file.getLocation());
         return fileSystemRepository.findInFileSystem(file.getLocation());
+    }
+
+    public long saveWEB(byte[] bytes, String webName ,invoice invoice) throws Exception {
+        if(invoice == null){
+            throw new customExeption("no invoice found");
+        }
+        String location = fileSystemRepository.save(bytes, webName);
+        attachment x = new attachment(webName, location);
+        x.setInvoice(invoice);
+        x.setAttachmentType(attachmentType.WEBFORM);
+        attachmentRepo.save(x);
+        System.out.println("iddddd  from service  " + x.getId());
+
+        long id = x.getId();
+        return id;
     }
 
 

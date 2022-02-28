@@ -3,6 +3,8 @@ package com.trainingHarri.com.amrTraining.Services;
 import com.trainingHarri.com.amrTraining.DTOs.userDto;
 import com.trainingHarri.com.amrTraining.Model.sUser;
 import com.trainingHarri.com.amrTraining.Repositries.userRepo;
+import com.trainingHarri.com.amrTraining.exceptions.UsedEmailExeption;
+import com.trainingHarri.com.amrTraining.exceptions.UsedNameExeption;
 import com.trainingHarri.com.amrTraining.exceptions.customExeption;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,12 +80,17 @@ com.trainingHarri.com.amrTraining.Repositries.userRepoPa userRepoPa;
         if(!pattern.matcher(email).matches())
             throw new customExeption("Invalid email format");
         sUser count = userRep2.findByEmail(email);
+sUser countName =userRep2.findByUserName(c.getName());
 
         if(count != null)
-            throw new customExeption("Email already in use");
+            throw new UsedEmailExeption("Email already in use");
+  if(countName != null)
+      throw new UsedNameExeption("PLEASE CHOSE ANTHOR NAME");
+
         System.out.println("hehehehe");
         String hashedPassword = BCrypt.hashpw(c.getPassword(), BCrypt.gensalt(10));
         c.setPassword(hashedPassword);
+
         userRep2.save(c);
         long x= c.getUserid();
 
@@ -106,7 +113,11 @@ System.out.println("user id "+userId+"role id is"+roleId);
 }
 
     public Page<sUser> findAll(Pageable page) {
-        return   userRepoPa.findAll(page);
+        Page<sUser> x = userRepoPa.findAll(page);
+
+
+
+        return x;
 
     }
 }

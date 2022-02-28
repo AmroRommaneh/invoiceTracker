@@ -34,7 +34,7 @@ public class attachment {
     @JoinColumn(name="invoiceId")
     private invoice invoice;
 
-    public attachment(com.trainingHarri.com.amrTraining.attachmentType attachmentType, File content, String name, String location, com.trainingHarri.com.amrTraining.Model.invoice invoice) {
+    public attachment(com.trainingHarri.com.amrTraining.attachmentType attachmentType, File content, String name, String location, invoice invoice) {
         this.attachmentType = attachmentType;
         this.content = content;
         this.name = name;
@@ -60,16 +60,16 @@ public class attachment {
 
 
 
-    public com.trainingHarri.com.amrTraining.Model.invoice getInvoice() {
-        return invoice;
+    public Long getInvoice() {
+        return invoice.getExternalInvoiceId();
     }
 
-    public void setInvoice(com.trainingHarri.com.amrTraining.Model.invoice invoice) {
+    public void setInvoice(invoice invoice) {
         this.invoice = invoice;
     }
 
-    public File getContent() {
-        return content;
+    public int getContent() {
+        return 0;
     }
 
     public void setContent(File content) {

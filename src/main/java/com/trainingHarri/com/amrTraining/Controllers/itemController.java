@@ -8,12 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("api/Item")
+@CrossOrigin
+
 public class itemController {
 
 
@@ -32,5 +34,37 @@ public class itemController {
     }
 
 
+    @GetMapping(path = "/getItems")
+    public ResponseEntity<List<item>> getItems() {
+        //   Pageable firstPageWithTenElements = PageRequest.of(0, 10, Sort.by("invoiceId").descending());
+
+//System.out.println("weewn ward"+invoiceRepoPa.findAll(page));
+        return new ResponseEntity<>(itemservice.findAll(), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/getItems/{id}")
+    public ResponseEntity<item> getItemsById(@PathVariable long id) {
+        //   Pageable firstPageWithTenElements = PageRequest.of(0, 10, Sort.by("invoiceId").descending());
+
+//System.out.println("weewn ward"+invoiceRepoPa.findAll(page));
+        return new ResponseEntity<>(itemservice.find(id), HttpStatus.OK);
+    }
+
+
+    @GetMapping(path = "/getDiff/{id}")
+    public ResponseEntity<List<Object>> getItemsId(@PathVariable long id) {
+        //   Pageable firstPageWithTenElements = PageRequest.of(0, 10, Sort.by("invoiceId").descending());
+
+//System.out.println("weewn ward"+invoiceRepoPa.findAll(page));
+        return new ResponseEntity<>(itemservice.dif(id), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/getItemsNames")
+    public ResponseEntity<List<String>> getItemsNames() {
+        //   Pageable firstPageWithTenElements = PageRequest.of(0, 10, Sort.by("invoiceId").descending());
+
+//System.out.println("weewn ward"+invoiceRepoPa.findAll(page));
+        return new ResponseEntity<>(itemservice.findAllNames(), HttpStatus.OK);
+    }
 
 }

@@ -3,6 +3,7 @@ package com.trainingHarri.com.amrTraining.Model;
 import com.trainingHarri.com.amrTraining.Gender;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 @Entity
 @Table(name="User")
@@ -88,8 +89,12 @@ public class sUser {
         this.phoneNumber = phoneNumber;
     }
 
-    public List<Role> getRoles() {
-        return Roles;
+    public List<String> getRoles() {
+        List <String> x =new ArrayList<String>() ;
+        for (int i =0; i< Roles.size();i++){
+            x.add(Roles.get(i).getRoleName().toString());
+        }
+        return x;
     }
 
     public void setRoles(List<Role> roles) {

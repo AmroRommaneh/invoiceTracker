@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@CrossOrigin
 public class JwtAuthenticationController {
 
    @Autowired
@@ -30,23 +29,20 @@ public class JwtAuthenticationController {
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<String> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
-
         System.out.println(authenticationRequest.getUsername());
         System.out.println(authenticationRequest.getPassword());
 
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-
-        final UserDetails userDetails = userDetailsService
-                .loadUserByUsername(authenticationRequest.getUsername());
-
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         final String token = jwtTokenUtil.generateToken(userDetails);
-            HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.set("acces token",
-                    token);
+              System.out.println("toooken from jwt contoleer" + token);
 
-            return ResponseEntity.ok()
-                    .headers(responseHeaders)
-                    .body("tmam");
+              HttpHeaders responseHeaders = new HttpHeaders();
+            //  responseHeaders.add("acces-token",token);
+            responseHeaders.set("acces-token",token);
+              System.out.println(responseHeaders);
+
+        return  ResponseEntity.ok().headers(responseHeaders).body("tmam");
     }
 
     private void authenticate(String username, String password) throws Exception {

@@ -1,6 +1,9 @@
 package com.trainingHarri.com.amrTraining.Model;
 
+import com.trainingHarri.com.amrTraining.Status;
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 @Entity
@@ -16,6 +19,10 @@ public class invoice {
     private double amount;
    @Column(name = "externalInvoiceId" ,unique = true)
     private Long externalInvoiceId;
+    @Enumerated(EnumType.STRING)
+   private Status status;
+    @Column(name = "DateOfDeletion")
+    private Date dateOfDeletion;
 
     public invoice() {
     }
@@ -68,8 +75,13 @@ public class invoice {
         return invoiceId;
     }
 
-    public List<attachment> getAttachmentList() {
-        return attachmentList;
+    public List<Long> getAttachmentList() {
+        List <Long> x =new ArrayList<Long>() ;
+        for (int i =0; i< attachmentList.size();i++){
+            x.add(attachmentList.get(i).getId());
+        }
+
+        return x;
     }
 
     public void setAttachmentList(List<attachment> attachmentList) {
@@ -91,5 +103,33 @@ public class invoice {
 
     public void setUser(sUser user) {
         this.user = user;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public Date getDateOfDeletion() {
+        return dateOfDeletion;
+    }
+
+    public void setDateOfDeletion(Date dateOfDeletion) {
+        this.dateOfDeletion = dateOfDeletion;
+    }
+
+    @Override
+    public String toString() {
+        return "invoice{" +
+                "invoiceId=" + invoiceId +
+                ", dateOfCreation=" + dateOfCreation +
+                ", amount=" + amount +
+                ", externalInvoiceId=" + externalInvoiceId +
+                ", user=" + user +
+                ", attachmentList=" + attachmentList +
+                '}';
     }
 }
