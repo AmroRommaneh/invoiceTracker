@@ -10,8 +10,7 @@ public class item {
     private long itemId ;
     @Column(name = "name")
     private String name;
-    @Column(name = "quantity")
-    private double quantity;
+
     @Column(name = "price")
     private double price;
 
@@ -24,7 +23,6 @@ public class item {
 
     public item(String name, double quantity, double price) {
         this.name = name;
-        this.quantity = quantity;
         this.price = price;
     }
 
@@ -42,13 +40,7 @@ public class item {
         this.name = name;
     }
 
-    public double getQuantity() {
-        return quantity;
-    }
 
-    public void setQuantity(double quantity) {
-        this.quantity = quantity;
-    }
 
     public double getPrice() {
         return price;

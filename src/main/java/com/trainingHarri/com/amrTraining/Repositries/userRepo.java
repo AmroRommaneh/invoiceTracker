@@ -20,6 +20,10 @@ public interface userRepo extends JpaRepository<sUser,Long> {
     @Query(value ="INSERT INTO user_role (user_id, role_id) VALUES (:userId,:roleId)",nativeQuery = true)
     void insertIntoUserRole(@Param("userId") Long userId,@Param("roleId") Long roleId);
 
+    @Modifying
+    @Transactional
+    @Query(value ="DELETE FROM user_role where user_id =:userId",nativeQuery = true)
+    void deletUserRole(@Param("userId") Long userId);
 
 
 
@@ -40,4 +44,8 @@ public interface userRepo extends JpaRepository<sUser,Long> {
 
         @Query(value = "select * from user where name = :userName",nativeQuery = true)
         sUser findUserIdByUsername(@Param("userName") String userName);
+
+    @Query(value = "select * from user where id= :id ",nativeQuery = true)
+    sUser findByUserId(@Param("id") Long id);
 }
+

@@ -1,5 +1,6 @@
 package com.trainingHarri.com.amrTraining.Services;
 
+import com.trainingHarri.com.amrTraining.Model.invoiceItem;
 import com.trainingHarri.com.amrTraining.Model.item;
 import com.trainingHarri.com.amrTraining.Repositries.itemRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +30,13 @@ public class itemService {
 
     }
 
-    public List<Object> dif(long id) {
-        List<Object> y=invoiceItemRepo.findDif(id);
+    public List<invoiceItem> dif(long id) {
+        List<invoiceItem> y=invoiceItemRepo.findDif(id);
 
 
-
+for (int i =0 ; i<y.size();i++){
+    System.out.println(y.get(i).toString());
+}
 
         return y ;
     }

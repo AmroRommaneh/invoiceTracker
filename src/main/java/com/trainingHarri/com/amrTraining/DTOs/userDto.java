@@ -80,4 +80,20 @@ public class userDto {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+    public userDto() {
+    }
+
+    @Override
+    public String toString() {
+        return "userDto{" +
+                "userid=" + userid +
+                ", email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", gender=" + gender +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", Roles=" + Roles +
+                '}';
+    }
 }

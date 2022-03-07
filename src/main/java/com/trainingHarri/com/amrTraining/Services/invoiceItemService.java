@@ -15,15 +15,15 @@ public class invoiceItemService {
     @Autowired
     com.trainingHarri.com.amrTraining.Repositries.itemRepo itemRepo;
 
-    public void saveInvoiceItem(long invoiceId, long itemId){
+    public void saveInvoiceItem(long invoiceId, long itemId ,double itemQuan){
         item x = itemRepo.find(itemId);
         if(x==null){
             throw new customExeption("NO ITEM EXIST WITH THIS ID  "+itemId);
         }else {
-            x.setQuantity(x.getQuantity()-1.0);
         invoiceItem invoiceItem =new invoiceItem();
         invoiceItem.setInvoiceId(invoiceId);
         invoiceItem.setItemId(itemId);
+        invoiceItem.setQuantity(itemQuan);
             itemRepo.save(x);
         invoiceItemRepo.save(invoiceItem);
     }}
@@ -32,4 +32,6 @@ public class invoiceItemService {
         item x = itemRepo.find(itemId);
         if(x==null){
             throw new customExeption("NO ITEM EXIST WITH THIS ID  "+itemId);}
-}}
+}
+
+}

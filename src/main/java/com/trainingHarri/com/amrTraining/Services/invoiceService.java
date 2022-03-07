@@ -169,13 +169,14 @@ return "NO INVOICE FOUND WITH THIS EXTERNAL INVOICE ID";
 
             if (role.equals(roleName.ROLE_SUPER.toString())) {
                 invoiceRepo.save(inv);
-                saveItems(invoiceDto.getItems(), inv.getInvoiceId());
+                saveItems(invoiceDto.getItems(),invoiceDto.getQuantity(), inv.getInvoiceId());
+                return "INVOICE HAS BEEN UPDATED";
 
 
             } else {
                 if (userId == user.getUserid()) {
                     invoiceRepo.save(inv);
-                    saveItems(invoiceDto.getItems(), inv.getInvoiceId());
+                    saveItems(invoiceDto.getItems(),invoiceDto.getQuantity(), inv.getInvoiceId());
                     return "INVOICE HAS BEEN UPDATED";
 
 
@@ -183,7 +184,7 @@ return "NO INVOICE FOUND WITH THIS EXTERNAL INVOICE ID";
                     return "YOU ARE NOT ALLOWED TO MAKE UPDATE";
             }
         }
-        return null;
+
     }
 
     public Map<String, Object> getInvoice(Long externalInvoiceId) {
@@ -210,14 +211,16 @@ return "NO INVOICE FOUND WITH THIS EXTERNAL INVOICE ID";
 
     }
 
-    public void saveItems(List<Long> items,long invoiceId){
+    public void saveItems(List<Long>items,List<Long> quantity,long invoiceId){
 System.out.println(items);
         invoiceItemRepo.deleteAll(invoiceId);
 
-        for (int i =0;i<items.size();i++){
 
-            invoiceItemService.saveInvoiceItem(invoiceId,items.get(i));
+        for (int i =0;i<items.size();i++){
+            invoiceItemService.saveInvoiceItem(invoiceId,items.get(i),quantity.get(i));
         }
+
+
 
     }
 

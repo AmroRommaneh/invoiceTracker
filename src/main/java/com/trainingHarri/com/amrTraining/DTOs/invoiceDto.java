@@ -1,7 +1,7 @@
 package com.trainingHarri.com.amrTraining.DTOs;
 
-import com.trainingHarri.com.amrTraining.Model.sUser;
 import com.trainingHarri.com.amrTraining.Model.attachment;
+import com.trainingHarri.com.amrTraining.Model.sUser;
 
 import java.util.Date;
 import java.util.List;
@@ -16,7 +16,8 @@ public class invoiceDto {
     private Long externalInvoiceId;
     private sUser user;
     private List<attachment> attachmentList;
-    private List<Long> Items;
+    private List<Long> itemss;
+    private List<Long> quantity;
 
     public long getInvoiceId() {
         return invoiceId;
@@ -75,10 +76,33 @@ public class invoiceDto {
     }
 
     public List<Long> getItems() {
-        return Items;
+        return itemss;
     }
 
     public void setItems(List<Long> items) {
-        Items = items;
+        itemss = items;
+    }
+
+    public List<Long> getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(List<Long> quantity) {
+        this.quantity = quantity;
+    }
+
+    @Override
+    public String toString() {
+        return "invoiceDto{" +
+                "invoiceId=" + invoiceId +
+                ", userId=" + userId +
+                ", dateOfCreation=" + dateOfCreation +
+                ", amount=" + amount +
+                ", externalInvoiceId=" + externalInvoiceId +
+                ", user=" + user +
+                ", attachmentList=" + attachmentList +
+                ", items=" + itemss +
+                ", quantity=" + quantity +
+                '}';
     }
 }

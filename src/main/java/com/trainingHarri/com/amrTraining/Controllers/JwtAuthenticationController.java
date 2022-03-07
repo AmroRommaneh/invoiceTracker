@@ -2,6 +2,7 @@ package com.trainingHarri.com.amrTraining.Controllers;
 
 
 import com.trainingHarri.com.amrTraining.Model.JwtRequest;
+import com.trainingHarri.com.amrTraining.Model.sUser;
 import com.trainingHarri.com.amrTraining.Services.JwtUserDetailsService;
 import com.trainingHarri.com.amrTraining.config.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,10 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
@@ -26,11 +30,20 @@ public class JwtAuthenticationController {
 
     @Autowired
     private JwtUserDetailsService userDetailsService;
-
+@Autowired
+com.trainingHarri.com.amrTraining.Repositries.userRepo userRepo;
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<String> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
         System.out.println(authenticationRequest.getUsername());
         System.out.println(authenticationRequest.getPassword());
+        sUser x =userRepo.findByUserName(authenticationRequest.getUsername());
+        if(x.getStatus().toString().equals("DEACTIVATED")){
+            HttpHeaders responseHeaders = new HttpHeaders();
+            //  responseHeaders.add("acces-token",token);
+            responseHeaders.set("error","YOU ARE DEACTIVATED");
+            return  ResponseEntity.badRequest().headers(responseHeaders).body("DEACTIVATED");
+
+        }
 
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());

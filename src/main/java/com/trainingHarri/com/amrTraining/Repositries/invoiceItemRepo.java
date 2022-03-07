@@ -25,8 +25,9 @@ public interface invoiceItemRepo extends JpaRepository<invoiceItem,Long> {
     @Query(value = "DELETE FROM invoice_item WHERE invoice_id = :invoiceId", nativeQuery = true)
     void deleteAll(@Param("invoiceId") Long invoiceId);
 
-    @Query(value = "select  invoice_id,item_id,name,price ,quantity from invoice_item INNER JOIN  item ON invoice_item.item_id=item.id where invoice_id = :invid", nativeQuery = true)
-    List<Object> findDif(@Param("invid") Long invid);
+    @Query(value = "select  invoice_item.id,item_id,invoice_id,item.name,item.price,quantity from invoice_item INNER JOIN  item ON invoice_item.item_id=item.id where invoice_id = :invid", nativeQuery = true)
+    List<invoiceItem> findDif(@Param("invid") Long invid);
 
 
 }
+//id,invoice_id,item_id,name,price

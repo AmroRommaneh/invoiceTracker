@@ -25,5 +25,32 @@ public class invoiceItem {
         @Column(name = "invoiceId")
         private  long invoiceId;
 
-    }
+        @org.springframework.data.annotation.Transient
+        String name;
+        @org.springframework.data.annotation.Transient
+        double price;
+        @Column(name = "quantity")
+        private double quantity;
+
+
+        @Override
+        public String toString() {
+                return "invoiceItem{" +
+                        "id=" + id +
+                        ", itemId=" + itemId +
+                        ", invoiceId=" + invoiceId +
+                        ", itemName='" + name + '\'' +
+                        ", itemPrice=" + price +
+                        ", quantity=" + quantity +
+                        '}';
+        }
+}
+
+
+
+
+
+
+
+
 

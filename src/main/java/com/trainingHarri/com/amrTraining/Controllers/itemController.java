@@ -2,6 +2,7 @@ package com.trainingHarri.com.amrTraining.Controllers;
 
 
 import com.trainingHarri.com.amrTraining.DTOs.itemDto;
+import com.trainingHarri.com.amrTraining.Model.invoiceItem;
 import com.trainingHarri.com.amrTraining.Model.item;
 import com.trainingHarri.com.amrTraining.Services.itemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,6 @@ public class itemController {
 
         item.setName(itemdto.getName());
         item.setPrice(itemdto.getPrice());
-        item.setQuantity(itemdto.getQuantity());
         itemservice.addItem(item);
         return new ResponseEntity<>("the item has been added", HttpStatus.OK);
     }
@@ -52,7 +52,7 @@ public class itemController {
 
 
     @GetMapping(path = "/getDiff/{id}")
-    public ResponseEntity<List<Object>> getItemsId(@PathVariable long id) {
+    public ResponseEntity<List<invoiceItem>> getItemsId(@PathVariable long id) {
         //   Pageable firstPageWithTenElements = PageRequest.of(0, 10, Sort.by("invoiceId").descending());
 
 //System.out.println("weewn ward"+invoiceRepoPa.findAll(page));

@@ -1,5 +1,5 @@
 package com.trainingHarri.com.amrTraining;
 
 public enum Status {
-    EXIST,DELETED
+    EXIST,DELETED,ACTIVE,DEACTIVATED
 }

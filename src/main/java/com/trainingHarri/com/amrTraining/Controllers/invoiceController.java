@@ -43,9 +43,11 @@ public class invoiceController {
     @PreAuthorize("!hasRole('ROLE_AUDITOR')")
     @PostMapping(path = "/addInvoice")
     public ResponseEntity<String> addInvoice(@RequestBody invoiceDto invoiceDto,@RequestHeader String Authorization) {
+        System.out.println(invoiceDto.toString());
+List<Long> items= invoiceDto.getItems();
+       try {
 
-        try {
-            invoiceService.checkItems(invoiceDto.getItems());
+            invoiceService.checkItems(items);
         }catch (customExeption e){
 
             System.out.println(e.getErrorMessage());
@@ -73,11 +75,11 @@ System.out.println("message "+x.getErrorMessage());
         }
 
 
-        saveItems(invoiceDto.getItems(),invoice.getInvoiceId());
+        saveItems(invoiceDto.getItems(), invoiceDto.getQuantity(),invoice.getInvoiceId());
 
 
 
-        return new ResponseEntity<>("the invoice has been added", HttpStatus.OK);
+       return new ResponseEntity<>("the invoice has been added", HttpStatus.OK);
     }
 
     @PreAuthorize("!hasRole('ROLE_AUDITOR')")
@@ -102,9 +104,23 @@ System.out.println("message "+x.getErrorMessage());
   @PreAuthorize("!hasRole('ROLE_AUDITOR')")
     @PutMapping(path = "/updateInvoice")
     public ResponseEntity<String> updateInvoice(@RequestBody invoiceDto invoiceDto,@RequestHeader String Authorization) {
+      List<Long> items= invoiceDto.getItems();
+      try {
 
+          invoiceService.checkItems(items);
+      }catch (customExeption e){
 
+          System.out.println(e.getErrorMessage());
+          HttpHeaders responseHeaders = new HttpHeaders();
+          responseHeaders.set("error",e.getErrorMessage());
+
+          return ResponseEntity.badRequest().headers(responseHeaders).body(e.getErrorMessage());
+
+      }
+
+      System.out.println(invoiceDto.toString());
    String x= invoiceService.update(invoiceDto,Authorization);
+   System.out.println("XXXXXXXXXX" +x);
    if(x.equals("NO INVOICE FOUND WITH THIS EXTERNAL INVOICE ID")) {
        return new ResponseEntity<>(x, HttpStatus.OK);
    }else  if(x.equals("INVOICE HAS BEEN UPDATED")) {
@@ -142,10 +158,10 @@ System.out.println(page.getPageNumber() +"     ffffff     "+page.getPageSize() +
         return new ResponseEntity<>(invoiceService.getInvoice(externalInvoiceId), HttpStatus.OK);
     }
 
-    public void saveItems(List<Long> items,long invoiceId){
+    public void saveItems(List<Long>items,List<Long> quantity ,long invoiceId){
 
         for (int i =0;i<items.size();i++){
-            invoiceItemService.saveInvoiceItem(invoiceId,items.get(i));
+            invoiceItemService.saveInvoiceItem(invoiceId,items.get(i), quantity.get(i));
         }
 
     }

@@ -22,6 +22,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -41,6 +43,8 @@ public class UserController {
 
     @Autowired
     private JwtUserDetailsService userDetailsService;
+    @Autowired
+    com.trainingHarri.com.amrTraining.Repositries.userRepo userRepo;
 
     @PostMapping(path = "/registerUser")
     public ResponseEntity<String> registerUser(@RequestBody userDto userDto) {
@@ -57,7 +61,6 @@ public class UserController {
             userSerivce.registerUser(user);
 
         } catch (UsedNameExeption e) {
-            System.out.println("sajdkjadkasdkaskdaspkd NAME IS NOT AVAILABLE");
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.set("error", "NAME IS NOT AVAILABLE");
 
@@ -94,25 +97,66 @@ public class UserController {
     public ResponseEntity<String> loginUser(@RequestBody Map<String, Object> clientMap) {
         String email = (String) clientMap.get("email");
         String password = (String) clientMap.get("password");
-        sUser user = userSerivce.validateUser(email, password);
-        System.out.println(email);
-        System.out.println(password);
-        if (user == null)
-            throw new customExeption("No user exsit");
+        try {
+            sUser user = userSerivce.validateUser(email, password);
+            return new ResponseEntity<>("loged in", HttpStatus.OK);
 
-        return new ResponseEntity<>("loged in", HttpStatus.OK);
+        }catch (customExeption e){
+            return new ResponseEntity<>(e.getErrorMessage(), HttpStatus.BAD_REQUEST);
+
+        }
+
+
     }
 
-    @PutMapping("/updateUser")
-    public ResponseEntity<Map<String, Object>> updateUser(@RequestBody userDto userDto) {
-        Map<String, Object> y = userService.updateUser(userDto);
-        return new ResponseEntity<>(y, HttpStatus.OK);
-    }
+//    @PutMapping("/updateUser")
+//    public ResponseEntity<Map<String, Object>> updateUser(@RequestBody userDto userDto) {
+//        Map<String, Object> y = userService.updateUser(userDto);
+//        return new ResponseEntity<>(y, HttpStatus.OK);
+//    }
 
     @PreAuthorize("hasRole('ROLE_SUPER')")
     @GetMapping("/getAllUsers")
     public ResponseEntity<Page<sUser>> findAllUsers(Pageable pageable) {
         return new ResponseEntity<>(userSerivce.findAll(pageable), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_SUPER')")
+    @DeleteMapping(path = "/deleteUser/{userId}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long userId,@RequestHeader String Authorization) {
+        sUser x =userRepo.findByUserId(userId);
+        String y= userSerivce.deleteUser(x,Authorization);
+        return new ResponseEntity<>(y, HttpStatus.OK);
+    }
+
+
+    @PreAuthorize("hasRole('ROLE_SUPER')")
+    @PutMapping(path = "/updateUSer")
+    public ResponseEntity<String> updateUser(@RequestBody Map<String,Object> y) {
+        userDto userDto =new userDto();
+        userDto.setEmail(y.get("email").toString());
+        userDto.setPhoneNumber(y.get("phoneNumber").toString());
+        Role role = roleRepo.findbyname(y.get("Roles").toString());
+
+
+        List<Role> x =new ArrayList<Role>();
+        x.add(role);
+        userDto.setRoles(x);
+        Long convertedLong = Long.parseLong(y.get("userid").toString());
+        userDto.setUserid(convertedLong);
+        String z= userSerivce.update(userDto);
+        System.out.println("<<<<<<>>>>>>>>>");
+        System.out.println(y);
+        System.out.println("<<<<<<>>>>>>>>>");
+
+        System.out.println(userDto.getRoles());
+        userSerivce.saveUserRole(userDto.getUserid(), role.getId());
+
+        if(z.equals("User Has Been Updated"))
+            return new ResponseEntity<>("User Has Been Updated", HttpStatus.OK);
+
+
+      return null;
     }
 
 }

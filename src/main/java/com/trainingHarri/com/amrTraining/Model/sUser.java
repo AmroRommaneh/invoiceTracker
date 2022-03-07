@@ -1,6 +1,7 @@
 package com.trainingHarri.com.amrTraining.Model;
 
 import com.trainingHarri.com.amrTraining.Gender;
+import com.trainingHarri.com.amrTraining.Status;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -22,6 +23,8 @@ public class sUser {
     private Gender gender;
     @Column(name = "phoneNumber",unique = true)
     private String phoneNumber;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "userRole",
@@ -32,12 +35,14 @@ public class sUser {
     @OneToMany(mappedBy = "user")
     private List<invoice> invoices;
 
-    public sUser(String email, String name, String password, Gender gender, String phoneNumber) {
+    public sUser(String email, String name, String password, Gender gender, String phoneNumber, Status status, List<Role> roles) {
         this.email = email;
         this.name = name;
         this.password = password;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
+        this.status = status;
+        Roles = roles;
     }
 
     public sUser() {
@@ -101,5 +106,11 @@ public class sUser {
         Roles = roles;
     }
 
+    public Status getStatus() {
+        return status;
+    }
 
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 }
